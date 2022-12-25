@@ -1,4 +1,4 @@
-# InstrumentsQuotes
+# StocksQuotes
 
 ## To start the application
 ### 1. run *npm start* in root folder
