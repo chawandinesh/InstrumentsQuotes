@@ -35,6 +35,7 @@ const Instruments: React.FC = () => {
   const [limit, setLimit] = useState<number>(10);
   //search
   const [search, setSearch] = useState<string>("");
+  const [filteredData, setFilteredData] = useState<IInstruments[]>(data)
 
   /**
    * @function @name handlePage
@@ -67,6 +68,7 @@ const Instruments: React.FC = () => {
       const parsedInstruments = JSON.parse(helpers.csvToJson(data)); //converting csv file into json on getting response
       if (_.size(parsedInstruments)) {
         setData(parsedInstruments);
+        setFilteredData(parsedInstruments)
       }
     } catch (err) {
       setLoading(false);
@@ -75,11 +77,20 @@ const Instruments: React.FC = () => {
     }
   };
 
-  //debouncing input
-  const handleChange = _.debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    // const fuse = new Fuse()
-  }, 500);
+  const fuse = new Fuse(data, {
+    keys: ['Symbol', 'Name']
+  })
+
+  //input
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const getFilteredInstruments =  fuse.search(e.target.value)
+    const extractedInstruments = getFilteredInstruments.map(each => each.item)
+    if(e.target.value){
+      setFilteredData(extractedInstruments)
+    }else{
+      setFilteredData(data)
+    }
+  }
 
   /**
    * useEffect hook to call fetch api on initial mount
@@ -114,7 +125,7 @@ const Instruments: React.FC = () => {
       render: (data: string) =>
         data ? (
           <Typography variant="subtitle2">
-            {moment(data).format("Do MMM YYYY,  h:mm A")}
+            {moment(data).format("Do MMM YYYY,  HH:mm")}
           </Typography>
         ) : (
           <></>
@@ -159,17 +170,7 @@ const Instruments: React.FC = () => {
           columns={tableColumns}
           start={page * limit}
           end={limit + page * limit}
-          data={data.filter((each, idx) => {
-            if (
-              _.size(_.get(each, "Name", "")) &&
-              _.size(_.get(each, "Symbol", ""))
-            ) {
-              return (
-                each.Name.toLowerCase().includes(search.toLowerCase()) ||
-                each.Sector.toLowerCase().includes(search.toLowerCase())
-              );
-            }
-          })}
+          data={filteredData}
         />
       </>
     </Layout>

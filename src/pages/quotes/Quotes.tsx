@@ -37,7 +37,7 @@ const FormatDate: React.FC<{
       color={danger ? "red" : ""}
       variant="body2"
     >
-      {moment(date).format("Do MMM YYYY, HH:mm:ss a")}
+      {moment(date).format("Do MMM YYYY, HH:mm:ss")}
     </Typography>
   );
 };
