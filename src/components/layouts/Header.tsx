@@ -11,7 +11,7 @@ const Header:React.FC = () => {
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Sensible
+            Sensibull
           </Typography>
         </Toolbar>
       </AppBar>

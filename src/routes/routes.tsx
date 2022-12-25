@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 import { AppLoader } from "../components/app-loader";
 import { NotFound } from "../pages/not-found";
 
-const Instruments = lazy(() => import("../pages/instruments"));
+const Stocks = lazy(() => import("../pages/stocks"));
 const Quotes = lazy(() => import("../pages/quotes"));
 
 /**
@@ -20,10 +20,10 @@ const AppRoutes = () => {
     <Suspense fallback={<AppLoader />}>
       <Router>
         <Routes>
-          <Route path="/instruments" element={<Instruments />} />
+          <Route path="/stocks" element={<Stocks />} />
           <Route path="/quotes/:symbol" element={<Quotes />} />
           <Route path="/not-found" element={<NotFound />} />
-          <Route path="/" element={<Navigate to="/instruments" />} />
+          <Route path="/" element={<Navigate to="/stocks" />} />
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Routes>
       </Router>

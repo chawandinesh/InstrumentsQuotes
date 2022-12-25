@@ -88,15 +88,16 @@ const Quotes = () => {
       const allTimes = _.size(data)
         ? _.map(data, (eachData) => moment(_.get(eachData, "valid_till", "")))
         : [];
-      const utcTime = moment.utc().format("YYYY-MM-DD HH:mm:ss")
+      const utcTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
       const minTime = moment.min(allTimes); //minimum time, latest in all expirations
-      const utcOfMinTime = minTime.format("YYYY-MM-DD HH:mm:ss")
-      const isExpires =moment(utcTime,"YYYY-MM-DD HH:mm:ss").isAfter(moment(utcOfMinTime,"YYYY-MM-DD HH:mm:ss"))
-      if(isExpires){
-        clearInterval(interval)
-        window.location.reload()
+      const utcOfMinTime = minTime.format("YYYY-MM-DD HH:mm:ss");
+      const isExpires = moment(utcTime, "YYYY-MM-DD HH:mm:ss").isAfter(
+        moment(utcOfMinTime, "YYYY-MM-DD HH:mm:ss")
+      );
+      if (isExpires) {
+        clearInterval(interval);
+        window.location.reload();
       }
-    
     }, 5000);
   };
 

@@ -8,7 +8,7 @@ const baseUrl_v2 = "https://prototype.sbulltech.com/api/v2";
 
 
 
-const getInstruments = () =>
+const getStocks = () =>
   axios({
     method: "GET",
     url: `${baseUrl_v2}/instruments`,
@@ -19,6 +19,6 @@ const getQuotes = (symbol: string) =>
 
 
 export const API = {
-    getInstruments,
+    getStocks,
     getQuotes
 }

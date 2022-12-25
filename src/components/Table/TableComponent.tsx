@@ -30,7 +30,7 @@ interface ITableAction {
 }
 
 interface ITableComponent {
-  data: any[]; // here any can be instruments or quotes
+  data: any[]; // here any can be stocks or quotes
   columns: {
     label: string;
     name: string;
@@ -164,7 +164,7 @@ const TableComponent: React.FC<ITableComponent> = ({
           ) : !_.size(data) ? (
             <TableRow>
               <TableCell
-                colSpan={3}
+                colSpan={_.size(columns)}
                 align="center"
                 style={{ verticalAlign: "top" }}
               >

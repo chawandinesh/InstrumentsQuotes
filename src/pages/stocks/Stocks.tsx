@@ -1,5 +1,5 @@
 /**
- * Instruments Page
+ * Stocks Page
  */
 import { useEffect, useState } from "react";
 import _ from "lodash";
@@ -7,14 +7,14 @@ import { Link } from "react-router-dom";
 import { API } from "../../api";
 import { Layout } from "../../components/layouts";
 import { TableComponent } from "../../components/Table";
-import { NO_INSTRUMENTS, SOMETHING_WENT_WRONG } from "../../constants";
+import { NO_STOCKS, SOMETHING_WENT_WRONG } from "../../constants";
 import { helpers } from "../../helpers";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { Grid, Stack, TextField } from "@mui/material";
 import { AppLoader } from "../../components/app-loader";
 import Fuse from "fuse.js"
-export interface IInstruments {
+export interface IStocks {
   Name: string;
   Sector: string;
   Symbol: string;
@@ -22,20 +22,19 @@ export interface IInstruments {
 }
 
 /**
- * Instruments component
+ * Stocks component
  */
-const Instruments: React.FC = () => {
+const Stocks: React.FC = () => {
   //for api
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<IInstruments[]>([]);
+  const [data, setData] = useState<IStocks[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>("");
   //For table pagination
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   //search
-  const [search, setSearch] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<IInstruments[]>(data)
+  const [filteredData, setFilteredData] = useState<IStocks[]>(data)
 
   /**
    * @function @name handlePage
@@ -56,19 +55,19 @@ const Instruments: React.FC = () => {
   };
 
   /**
-   * @function @name fetchInstruments
-   * @description api to fetch instruments
+   * @function @name fetchStocks
+   * @description api to fetch stocks
    */
-  const fetchInstruments = async () => {
+  const fetchStocks = async () => {
     setLoading(true);
     try {
-      const { data } = await API.getInstruments();
+      const { data } = await API.getStocks();
       setLoading(false);
       setError(false);
-      const parsedInstruments = JSON.parse(helpers.csvToJson(data)); //converting csv file into json on getting response
-      if (_.size(parsedInstruments)) {
-        setData(parsedInstruments);
-        setFilteredData(parsedInstruments)
+      const parsedStocks = JSON.parse(helpers.csvToJson(data)); //converting csv file into json on getting response
+      if (_.size(parsedStocks)) {
+        setData(parsedStocks);
+        setFilteredData(parsedStocks)
       }
     } catch (err) {
       setLoading(false);
@@ -83,10 +82,10 @@ const Instruments: React.FC = () => {
 
   //input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const getFilteredInstruments =  fuse.search(e.target.value)
-    const extractedInstruments = getFilteredInstruments.map(each => each.item)
+    const getFilteredStocks =  fuse.search(e.target.value)
+    const extractedStocks = getFilteredStocks.map(each => each.item)
     if(e.target.value){
-      setFilteredData(extractedInstruments)
+      setFilteredData(extractedStocks)
     }else{
       setFilteredData(data)
     }
@@ -96,14 +95,14 @@ const Instruments: React.FC = () => {
    * useEffect hook to call fetch api on initial mount
    */
   useEffect(() => {
-    fetchInstruments();
+    fetchStocks();
     return () => {
       setLoading(false);
     };
   }, []);
 
   /**
-   * columns for instruments table
+   * columns for stocks table
    */
   const tableColumns = [
     {
@@ -144,10 +143,10 @@ const Instruments: React.FC = () => {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography variant="h6" mb={2} fontWeight={700}>
-              Instruments
+              Stocks
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={8} md={4} lg={3}>
             <TextField
               onChange={handleChange}
               size="small"
@@ -161,7 +160,7 @@ const Instruments: React.FC = () => {
           page={page}
           loading={loading}
           error={error}
-          noDataText={NO_INSTRUMENTS}
+          noDataText={NO_STOCKS}
           errorText={errorText}
           limit={limit}
           handlePage={handlePage}
@@ -177,4 +176,4 @@ const Instruments: React.FC = () => {
   );
 };
 
-export default Instruments;
+export default Stocks;
