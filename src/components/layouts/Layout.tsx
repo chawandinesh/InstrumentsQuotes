@@ -1,17 +1,20 @@
-import React from 'react'
-import Header from './Header'
+import { Box, Container } from "@mui/material";
+import React from "react";
+import Header from "./Header";
 
 interface ILayout {
-    children: React.ReactElement
+  children: React.ReactElement;
 }
 
-const Layout:React.FC<ILayout> = ({children}) => {
+const Layout: React.FC<ILayout> = ({ children }) => {
   return (
     <>
-     <Header/>
-     {children}
+      <Header />
+      <Container maxWidth="xl">
+        <Box p={3}>{children}</Box>
+      </Container>
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
