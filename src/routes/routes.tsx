@@ -13,7 +13,7 @@ const AppRoutes = () => {
         <Router>
             <Routes>
                 <Route path='/instruments' element={<Instruments/>}/>
-                <Route path='/quotes' element={<Quotes/>}/>
+                <Route path='/quotes/:symbol' element={<Quotes/>}/>
                 <Route path="/" element={<Navigate to="/instruments"/>}/>
             </Routes>
         </Router>

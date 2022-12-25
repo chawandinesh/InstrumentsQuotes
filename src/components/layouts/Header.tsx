@@ -7,11 +7,11 @@ import {
 
 const Header:React.FC = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1,height: 64 }}>
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Sensible
           </Typography>
         </Toolbar>
       </AppBar>

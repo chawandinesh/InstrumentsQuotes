@@ -13,6 +13,7 @@ import {
   Tooltip,
   TablePagination,
 } from "@mui/material";
+import {makeStyles} from '@mui/styles'
 import _ from "lodash";
 
 interface ITableAction {
@@ -25,7 +26,7 @@ interface ITableAction {
 
 interface ITableComponent {
     data: any[];
-    columns: {label: string,name: string, items?:ITableAction[] }[];
+    columns: {label: string,name: string, items?:ITableAction[],onClick?:(value:any) => void, render?:(value:any) => JSX.Element }[];
     error?: boolean;
     errorText?: string;
     loading?: boolean;
@@ -38,8 +39,17 @@ interface ITableComponent {
     page?: number;
     handleRowsPerPage?:(value: number) => void;
     handlePage?: (value: number) => void,
-    onClickCell?: (value:string) => void
+    rowsPerPageOptions?: number[],
+    start?: number,
+    end?:number
 }
+
+const useStyles = makeStyles({
+ clickable: {
+  cursor:'pointer'
+ }
+});
+
 
 const TableComponent: React.FC<ITableComponent> = ({
   data,
@@ -51,12 +61,15 @@ const TableComponent: React.FC<ITableComponent> = ({
   onClickActionIcon = (title: string,data: any) => {},
   pagination = false,
   limit = 0,
-  total = 5,
+  total,
   handleRowsPerPage = (value) => {},
   handlePage = (value) => {},
   page=0,
-  onClickCell = (value:string) => {}
+  rowsPerPageOptions=[5, 10, 25],
+  start=0,
+  end=5
 }) => {
+  const classes = useStyles()
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -103,7 +116,7 @@ const TableComponent: React.FC<ITableComponent> = ({
               </TableCell>
             </TableRow>
           ) : (
-            _.map(data, (eachData, idxData) => (
+            _.map(data.filter((each,idx) => idx >= start && idx < end ), (eachData, idxData) => (
               <TableRow
                 key={idxData}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -125,8 +138,13 @@ const TableComponent: React.FC<ITableComponent> = ({
                         ))}
                       </TableCell>
                     ) : (
-                      <TableCell key={idxCol} onClick={() => onClickCell(eachData)}>
-                        {_.get(eachData, eachCol.name, "")}
+                      <TableCell key={idxCol} className={eachCol?.onClick ? classes.clickable : undefined} onClick={() => eachCol?.onClick ?  eachCol.onClick(_.get(eachData, eachCol.name, "")) : {}}>
+                        {
+                          eachCol?.render ?
+                            eachCol?.render(_.get(eachData, eachCol.name, ""))
+                          :
+                          _.get(eachData, eachCol.name, "")
+                        }
                       </TableCell>
                     )}
                   </React.Fragment>
@@ -139,9 +157,9 @@ const TableComponent: React.FC<ITableComponent> = ({
       {
         pagination ?
         <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={rowsPerPageOptions}
             component="div"
-            count={total}
+            count={total || _.size(data)}
             rowsPerPage={limit}
             page={page}
             onRowsPerPageChange={(event) => handleRowsPerPage(parseInt(event.target.value))}
