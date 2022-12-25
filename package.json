@@ -1,12 +1,13 @@
 {
-  "name": "assignment-sensible",
+  "name": "assignment-sensibull",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "npm install --legacy-peer-deps && npm run build && npm run dev"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
